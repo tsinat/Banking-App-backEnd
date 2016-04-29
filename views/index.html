@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Balance</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+    <source src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.js"></script>
+    <!-- <script src='main.js'></script> -->
+    <script src='/js/module.js'></script>
+    <script src='/js/controller.js'></script>
+    <script src='/js/services.js'></script>
+</head>
+
+<body ng-app='myapp' ng-controller='mainCtrl'>
+    <div class="container">
+
+        <h1>My Checking Account</h1>
+        <form ng-submit='addBalance()'>
+            <h2>Add Balance</h2>
+            <div class="form-group">
+                <label for="">Date</label>
+                <input type="date" value="2013-01-08" class='form-control' ng-model='newAmount.date'>
+            </div>
+            <div class="form-group">
+                <label for="">Description</label>
+                <input type="text" class='form-control' ng-model='newAmount.description' required>
+            </div>
+            <div class="form-group">
+                <label for="">Debit</label>
+                <input type="number" class='form-control' ng-model='newAmount.debit' data-ng-disabled="newAmount.credit">
+            </div>
+            <div class="form-group">
+                <label for="email">Credit</label>
+                <input type="number" class='form-control' ng-model='newAmount.credit' data-ng-disabled="newAmount.debit">
+            </div>
+            <button type='submit' class='btn btn-primary' >Add Balance</button>
+        </form>
+        <div class="totalBalance">
+            <h2>TotalBalance ${{creTo - debTo}}</h2>
+        </div>
+
+        <form ng-if="editAmount" ng-submit='saveEdit()'>
+            <h2>Edit Amount</h2>
+            <!-- <div class="form-group">
+                <label for="">Date</label>
+                <input type="date" value="2013-01-08" class='form-control' ng-model='editAmount.date'>
+            </div> -->
+            <div class="form-group">
+                <label for="">Description</label>
+                <input type="text" class='form-control' ng-model='editAmount.description' required>
+            </div>
+            <div class="form-group">
+                <label for="">Debit</label>
+                <input type="number" class='form-control' ng-model='editAmount.debit'>
+            </div>
+            <div class="form-group">
+                <label for="email">Credit</label>
+                <input type="number" class='form-control' ng-model='editAmount.credit'>
+            </div>
+            <button type='submit' class='btn btn-primary' >Save</button>
+        </form>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th ng-click='sortBy("date")'>Date</th>
+                    <th ng-click='sortBy("name")'>Description</th>
+                    <th ng-click='sortBy("debit")'>Debits</th>
+                    <th ng-click='sortBy("credit")'>Credits</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat='balance in amount | filter:searchFilter | orderBy:sortOrder track by $index'>
+                    <td>{{balance.date | date: "yyyy-MM-dd"}}</td>
+                    <td>{{balance.description}}</td>
+                    <td>{{balance.debit || 0}}</td>
+                    <td>{{balance.credit ||0}}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-lg" ng-click="removeRow(balance)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-primary btn-lg" ng-click="editBalance(balance)">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                    </td>
+                </tr>
+                <hr class="col-lg-12">
+                <tr>
+                    <td></td>
+                    <td>TOTAL</td>
+                    <td>{{debTo}}</td>
+                    <td>{{creTo}}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+
+
+</body>
+
+</html>
